@@ -34,6 +34,8 @@ Slackware based NVIDIA Optimus setup.
 
 Note that this script runs as root, and will exit if you already have the repo downloaded.
  - USE AT YOUR OWN RISK!
+ 
+ WARNING : That script will only work on components still supported by NVIDIA and needs to be reworked in order to be compatible with legacy hardware.
 
 If you modify the builds in any way this script IS NOT FOR YOU.
 
