@@ -1,0 +1,151 @@
+#!/bin/sh
+## run as root
+
+# Ryan P.C. McQuen | Everett, WA | ryanpcmcquen@member.fsf.org
+# Modified by Incognito Anonymous | Wasteland | incognito4nonymous.890m.com/
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version, with the following exception:
+# the text of the GPL license may be omitted.
+
+# This program is distributed in the hope that it will be useful, but
+# without any warranty; without even the implied warranty of
+# merchantability or fitness for a particular purpose. Compiling,
+# interpreting, executing or merely reading the text of the program
+# may result in lapses of consciousness and/or very being, up to and
+# including the end of all existence and the Universe as we know it.
+# See the GNU General Public License for more details.
+
+# You may have received a copy of the GNU General Public License along
+# with this program (most likely, a file named COPYING).  If not, see
+# <http://www.gnu.org/licenses/>.
+
+# curl https://raw.githubusercontent.com/incognito4nonymous/Bumblebee-SlackBuilds-Legacy_Drivers-/master/psychobee.sh | sh
+
+STABLE=${STABLE:-no}
+REINSTALL=${REINSTALL:-no}
+
+if [ ! $UID = 0 ]; then
+  cat << EOF
+This script must be run as root.
+EOF
+  exit 1
+fi
+
+if [ -e ~/Bumblebee-SlackBuilds-Legacy_Drivers-/psychobee.sh ]; then
+  echo "Reinstall!"
+  export REINSTALL=${REINSTALL:-yes}
+elif [ -d ~/Bumblebee-SlackBuilds-Legacy_Drivers-/ ]; then
+  cat << EOF
+You already have the bumblebee directory,
+please rename to avoid changes you may have made.
+EOF
+  exit 1
+fi
+
+if [ "$(uname -m)" = "x86_64" ] && [ -e /lib/libc.so.6 ]; then
+  export COMPAT32=yes;
+fi
+
+install_latest_pkg() {
+  PACKAGE=$1
+  if [ -d "$PACKAGE/" ]; then
+    cd $PACKAGE/
+  else
+    cd ../$PACKAGE/
+  fi
+  sh $PACKAGE.SlackBuild
+  ls -t --color=never /tmp/$PACKAGE-*_bbsb.txz | head -1 | xargs -i upgradepkg --reinstall --install-new {}
+}
+
+install_latest_pkg_compat() {
+  PACKAGE=$1
+  if [ -d "$PACKAGE/" ]; then
+    cd $PACKAGE/
+  else
+    cd ../$PACKAGE/
+  fi
+  if [ "$COMPAT32" = yes ]; then
+    COMPAT32=yes sh $PACKAGE.SlackBuild
+  else
+    sh $PACKAGE.SlackBuild
+  fi
+  ls -t --color=never /tmp/$PACKAGE-*_bbsb.txz | head -1 | xargs -i upgradepkg --reinstall --install-new {}
+}
+
+if [ "$REINSTALL" = "no" ]; then
+  cd
+  git clone https://github.com/Incognito4nonymous/Bumblebee-SlackBuilds-Legacy_Drivers-.git
+  cd Bumblebee-SlackBuilds/
+fi
+
+if [ "$STABLE" = "yes" ]; then
+  git checkout 14.1
+fi
+
+## in case there are updates ;-)
+if [ "$REINSTALL" = "yes" ]; then
+  git pull
+fi
+
+## let's get some tarballs!
+sh download.sh
+
+groupadd bumblebee
+## add all non-root users (except ftp) to bumblebee group
+getent passwd | grep "/home" | cut -d: -f1 | sed '/ftp/d' | xargs -i usermod -G bumblebee -a {}
+
+install_latest_pkg libbsd
+
+install_latest_pkg bumblebee
+
+install_latest_pkg bbswitch
+
+install_latest_pkg_compat primus
+
+cd ../nouveau-blacklist/
+upgradepkg --reinstall xf86-video-nouveau-blacklist-noarch-1.txz
+if [ -z "$(grep xf86-video-nouveau /etc/slackpkg/blacklist)" ]; then
+  echo xf86-video-nouveau >> /etc/slackpkg/blacklist
+fi
+if [ -z "$(grep _bbsb /etc/slackpkg/blacklist)" ]; then
+  echo "[0-9]+_bbsb" >> /etc/slackpkg/blacklist
+fi
+
+if [ "$STABLE" = "yes" ]; then
+  install_latest_pkg libvdpau
+fi
+
+install_latest_pkg nvidia-kernel
+
+install_latest_pkg_compat nvidia-bumblebee
+
+chmod +x /etc/rc.d/rc.bumblebeed
+/etc/rc.d/rc.bumblebeed start
+
+if [ -z "$(grep bumblebeed /etc/rc.d/rc.local)" ]; then
+echo "if [ -x /etc/rc.d/rc.bumblebeed ]; then
+  /etc/rc.d/rc.bumblebeed start
+fi" >> /etc/rc.d/rc.local
+fi
+
+if [ -z "$(grep bumblebeed /etc/rc.d/rc.local_shutdown)" ]; then
+echo "if [ -x /etc/rc.d/rc.bumblebeed ]; then
+  /etc/rc.d/rc.bumblebeed stop
+fi" >> /etc/rc.d/rc.local_shutdown
+fi
+
+## these have to be executable to work  :-)
+chmod 755 /etc/rc.d/rc.local
+chmod 755 /etc/rc.d/rc.local_shutdown
+
+wget -N https://raw.githubusercontent.com/Incognito4nonymous/Bumblebee-SlackBuilds-Legacy_Drivers-/master/psychobee.sh -P ~/Bumblebee-SlackBuilds
+
+echo
+echo "+=====================================================+"
+echo "+       Please reboot to enjoy your new driver       +"
+echo "+   You shouldn't have to pray for it to work now ;) +"
+echo "+=====================================================+"
+echo
