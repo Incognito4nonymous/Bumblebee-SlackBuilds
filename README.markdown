@@ -35,8 +35,6 @@ Slackware based NVIDIA Optimus setup.
 Note that this script runs as root, and will exit if you already have the repo downloaded.
  - USE AT YOUR OWN RISK!
  
- WARNING : That script will only work on components still supported by NVIDIA and needs to be reworked in order to be compatible with legacy hardware.
-
 If you modify the builds in any way this script IS NOT FOR YOU.
 
 This script will (in addition to downloading & installing everything in order):
@@ -44,17 +42,17 @@ This script will (in addition to downloading & installing everything in order):
  - Detect Multilib
  - Create the necessary /etc/rc.d/rc.local* entries
  - Create the bumblebee group and add all normal users to it
- - Add a copy of crazybee inside of ~/Bumblebee-SlackBuilds/ for reinstalls
+ - Add a copy of crazybee inside of ~/Bumblebee-SlackBuilds-Legacy_Drivers-/ for reinstalls
 
 Simply run this as root:
 
-Current:
+14.2:
 
-    curl https://raw.githubusercontent.com/ryanpcmcquen/linuxTweaks/master/slackware/crazybee.sh | sh
+    curl https://raw.githubusercontent.com/Incognito4nonymous/Bumblebee-SlackBuilds-Legacy_Drivers-/master/slackware/psychobee.sh | sh
 
-Stable:
+14.1:
 
-    curl https://raw.githubusercontent.com/ryanpcmcquen/linuxTweaks/master/slackware/crazybee.sh | STABLE=yes sh
+    curl https://raw.githubusercontent.com/Incognito4nonymous/Bumblebee-SlackBuilds-Legacy_Drivers-/master/slackware/psychobee.sh | STABLE=yes sh
 
 P.S. This script uses upgradepkg --reinstall --install-new, so you can use it after kernel upgrades.  
 ;^)
@@ -63,11 +61,11 @@ For reinstalls, run:
 
 Current:
 
-    sh ~/Bumblebee-SlackBuilds/crazybee.sh
+    sh ~/Bumblebee-SlackBuilds-Legacy_Drivers-/psychobee.sh
 
-Stable:
+14.1:
 
-    STABLE=yes sh ~/Bumblebee-SlackBuilds/crazybee.sh
+    STABLE=yes sh ~/Bumblebee-SlackBuilds-Legacy_Drivers-/psychobee.sh
 
 
 ### The MANUAL way:
