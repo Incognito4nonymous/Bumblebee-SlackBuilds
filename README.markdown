@@ -29,7 +29,7 @@ Slackware based NVIDIA Optimus setup.
 
 ## Building and Installing
 
-### The AUTOMATIC way:
+### The AUTOMATIC way (HIGHLY DEPRECIATED):
 ---
 
 Note that this script runs as root, and will exit if you already have the repo downloaded.
