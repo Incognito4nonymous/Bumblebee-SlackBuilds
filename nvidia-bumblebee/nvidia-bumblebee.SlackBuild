@@ -115,13 +115,9 @@ cd $TMP/${PKGNAM[0]}
     libnvidia-ml.so.$VERSION \
     libnvidia-tls.so.$VERSION \
     libnvidia-wfb.so.$VERSION \
-    libnvidia-gtk2.so.$VERSION \
-    libnvidia-gtk3.so.$VERSION \
-    libnvidia-fatbinaryloader.so.$VERSION \
     libnvidia-glsi.so.$VERSION \
     libnvidia-opencl.so.$VERSION \
-    libnvidia-ptxjitcompiler.so.$VERSION \
-   $PKG/usr/lib${LIBDIRSUFFIX}/$PRGNAM
+    $PKG/usr/lib${LIBDIRSUFFIX}/$PRGNAM
 
   install -m 755 \
     libvdpau_nvidia.so.$VERSION \
@@ -158,15 +154,12 @@ cd $TMP/${PKGNAM[0]}
     ln -sf libnvidia-cfg.so.1                       libnvidia-cfg.so
     ln -sf libnvidia-ml.so.$VERSION                 libnvidia-ml.so.1
     ln -sf libnvidia-ml.so.1                        libnvidia-ml.so
-    ln -sf libnvidia-fatbinaryloader.so.$VERSION    libnvidia-fatbinaryloader.so.1
-    ln -sf libnvidia-fatbinaryloader.so.1           libnvidia-fatbinaryloader.so
     ln -sf libnvidia-glsi.so.$VERSION               libnvidia-glsi.so.1
     ln -sf libnvidia-glsi.so.1                      libnvidia-glsi.so
     ln -sf libnvidia-opencl.so.$VERSION             libnvidia-opencl.so.1
     ln -sf libnvidia-opencl.so.1                    libnvidia-opencl.so
-    ln -sf libnvidia-ptxjitcompiler.so.$VERSION     libnvidia-ptxjitcompiler.so.1
-    ln -sf libnvidia-ptxjitcompiler.so.1            libnvidia-ptxjitcompiler.so
-  cd -
+    
+cd -
 
   cd $PKG/usr/lib${LIBDIRSUFFIX}/$PRGNAM/vdpau
     ln -sf libvdpau_nvidia.so.$VERSION libvdpau_nvidia.so.1
@@ -194,11 +187,9 @@ cd $TMP/${PKGNAM[0]}
       32/libnvidia-glcore.so.$VERSION \
       32/libnvidia-ml.so.$VERSION \
       32/libnvidia-tls.so.$VERSION \
-      32/libnvidia-fatbinaryloader.so.$VERSION \
       32/libnvidia-glsi.so.$VERSION \
       32/libnvidia-opencl.so.$VERSION \
-      32/libnvidia-ptxjitcompiler.so.$VERSION \
-     $PKG/usr/lib/$PRGNAM
+    $PKG/usr/lib/$PRGNAM
 
     install -m 755 \
       32/libvdpau_nvidia.so.$VERSION \
@@ -220,14 +211,11 @@ cd $TMP/${PKGNAM[0]}
       ln -sf libnvcuvid.so.1                          libnvcuvid.so
       ln -sf libnvidia-ml.so.$VERSION                 libnvidia-ml.so.1
       ln -sf libnvidia-ml.so.1                        libnvidia-ml.so
-      ln -sf libnvidia-fatbinaryloader.so.$VERSION    libnvidia-fatbinaryloader.so.1
-      ln -sf libnvidia-fatbinaryloader.so.1           libnvidia-fatbinaryloader.so
       ln -sf libnvidia-glsi.so.$VERSION               libnvidia-glsi.so.1
       ln -sf libnvidia-glsi.so.1                      libnvidia-glsi.so
       ln -sf libnvidia-opencl.so.$VERSION             libnvidia-opencl.so.1
       ln -sf libnvidia-opencl.so.1                    libnvidia-opencl.so
-      ln -sf libnvidia-ptxjitcompiler.so.$VERSION     libnvidia-ptxjitcompiler.so.1
-      ln -sf libnvidia-ptxjitcompiler.so.1            libnvidia-ptxjitcompiler.so
+      
     cd -
 
     cd $PKG/usr/lib/$PRGNAM/vdpau
